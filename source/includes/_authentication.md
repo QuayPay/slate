@@ -1,36 +1,38 @@
 # Authentication
 
-> To authorize, use this code:
+QuayPay uses the oAuth2 framework to authorise requests.
 
-```ruby
-require 'kittn'
+Clients must pass the following fields to QuayPay's servers during the authentication process:
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-QuayPay uses the oAuth2 framework to authorise requests. Clients are provided with an application ID and secret to be passed when a customer authenticates against the QuayPay API.
+Parameter | Default | Description
+--------- | ------- | -----------
+Client ID | N/A | Provided by QuayPay and used to authenticate on the client side.
+Client Secret | N/A | Provided by QuayPay and used to authenticate on the server side.
+Redirect URI | N/A | Where to redirect users after successfully authenticating via login providers.
+Login Providers | ['google', 'facebook', 'form'] | The methods of login allowed for users to authenticate against the application.
+Login Method | 'iframe' | The method of displaying the login page to the end user.
 
 ## Obtaining a key and secret
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+```shell
+curl -F response_type=code \
+	-F client_id= "< CLIENT_ID >" \
+	-F client_secret= "< CLIENT_SECRET >"  \
+	-F redirect_uri=urn:ietf:wg:oauth:2.0:oob \
+	-F username=user@example.com \
+	-X POST http://localhost:3000/oauth/authorize
 ```
+
+```javascript
+qp.init({
+	clientId:"< CLIENT_ID >",
+	redirect:"< REDIRECT_URI >",
+	loginProviders: [ "< PROVIDER >", "< PROVIDER >"]
+});
+```
+
+> Make sure to replace `< FIELD >` with the authentication data provided by QuayPay.
+
 
 Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
 
