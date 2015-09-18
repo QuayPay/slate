@@ -10,6 +10,7 @@ toc_footers:
   - <a href='http://quaypay.com'>Visit QuayPay's Site</a>
 
 includes:
+  - applications
   - authentication
   - cards
   - charges
@@ -21,9 +22,7 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the QuayPay API Documentation! Here we aim to document the use of our API endpoints for working with stored cards, charges, loyalty points and user authentication.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](http://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+We currently offer a JavaScript client library to accompany our raw HTTP API and plan to release support for other languages shortly.
 

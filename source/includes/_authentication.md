@@ -1,18 +1,6 @@
 # Authentication
 
-QuayPay uses the oAuth2 framework to authorise requests.
-
-Clients must pass the following fields to QuayPay's servers during the authentication process:
-
-Parameter | Default | Description
---------- | ------- | -----------
-Client ID | N/A | Provided by QuayPay and used to authenticate on the client side.
-Client Secret | N/A | Provided by QuayPay and used to authenticate on the server side.
-Redirect URI | N/A | Where to redirect users after successfully authenticating via login providers.
-Login Providers | ['google', 'facebook', 'form'] | The methods of login allowed for users to authenticate against the application.
-Login Method | 'iframe' | The method of displaying the login page to the end user.
-
-## Obtaining a key and secret
+## Obtaining an Authorization Token
 
 ```shell
 curl -F response_type=code \
@@ -22,7 +10,6 @@ curl -F response_type=code \
 	-F username=user@example.com \
 	-X POST http://localhost:3000/oauth/authorize
 ```
-
 ```javascript
 qp.init({
 	clientId:"< CLIENT_ID >",
@@ -30,6 +17,17 @@ qp.init({
 	loginProviders: [ "< PROVIDER >", "< PROVIDER >"]
 });
 ```
+QuayPay uses the oAuth2 framework to authorise requests.
+
+Clients must pass the following fields to QuayPay's servers during the authentication process:
+
+Parameter | Default | Description
+--------- | ------- | -----------
+Client ID | N/A | Provided by QuayPay and used to authenticate on the client side.
+Client Secret | N/A | Provided by QuayPay and used to authenticate on the server side.
+Redirect URI | N/A | Where to redirect users after successfully authenticating via login providers.
+Login Providers | ['google', 'facebook', 'form'] | The authentication providers allowed for users to authenticate against the application.
+Login Method | 'iframe' | The method of displaying the login page to the end user.
 
 > Make sure to replace `< FIELD >` with the authentication data provided by QuayPay.
 
