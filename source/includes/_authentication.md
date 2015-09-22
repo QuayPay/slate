@@ -40,3 +40,16 @@ QuayPay currently provides access to the authentication services of Facebook and
 
 Merchants who wish to have users authenticated on QuayPay using their own website's authentication scheme must support the oAuth2 standard for delegation of access to user resources by QuayPay.
 
+## Auth Methods
+
+### iFrame
+
+By default, an application's `auth_method` is set to `iframe`. This means that the prompt to register or login is displayed in an overlayed iFrame element.
+
+### Popup
+
+Setting `auth_method` to `popup` displays the authentication providers in a popup window rather than an iFrame.
+
+### Redirect
+
+The `redirect` authentication method willl redirect the entire page. If there is only a single authentication provider, the page is redirected to the prompt for this provider, otherwise all auth providers are displayed on the redirected page.

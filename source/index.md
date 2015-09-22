@@ -15,6 +15,8 @@ includes:
   - cards
   - charges
   - points
+  - workflows
+  - filters
   - errors
 
 search: true
