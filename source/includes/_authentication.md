@@ -1,45 +1,42 @@
 # Authentication
 
-## Obtaining an Authorization Token
+## Using the Client Library
 
-```shell
-curl -F response_type=code \
-	-F client_id= "< CLIENT_ID >" \
-	-F client_secret= "< CLIENT_SECRET >"  \
-	-F redirect_uri=urn:ietf:wg:oauth:2.0:oob \
-	-F username=user@example.com \
-	-X POST http://localhost:3000/oauth/authorize
-```
 ```javascript
 qp.init({
-	clientId:"< CLIENT_ID >",
-	redirect:"< REDIRECT_URI >",
-	loginProviders: [ "< PROVIDER >", "< PROVIDER >"]
+	client_id:"testappid",
+	redirect_uri:"http://merchant.com/auth/post_token.html",
+	auth_providers: [ "facebook", "form" ]
 });
 ```
-QuayPay uses the oAuth2 framework to authorise requests.
 
-Clients must pass the following fields to QuayPay's servers during the authentication process:
+Using our JavaScript client library makes authentication very easy, requiring only three parameters:
 
-Parameter | Default | Description
---------- | ------- | -----------
-Client ID | N/A | Provided by QuayPay and used to authenticate on the client side.
-Client Secret | N/A | Provided by QuayPay and used to authenticate on the server side.
-Redirect URI | N/A | Where to redirect users after successfully authenticating via login providers.
-Login Providers | ['google', 'facebook', 'form'] | The authentication providers allowed for users to authenticate against the application.
-Login Method | 'iframe' | The method of displaying the login page to the end user.
+- `client_id` is your application's ID provided for you after signup
+- `redirect_uri` is where QuayPay will redirect to with an access token upon successful authentication
+- `auth_providers` is either the set or a subset of the available methods for authentication
 
-> Make sure to replace `< FIELD >` with the authentication data provided by QuayPay.
+For the example on the right, when a user attempts to make any unauthorized API request, they are prompted to login to QuayPay via either Facebook or a form based login.
 
+The method used to direct a user to the prompt to login is defined by the application's `auth_method` attribute. This is set to `'iframe'` by default but can hold the values `'popup'` for a popup window or `'redirect'` for a full page redirect to the login prompt.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+Once successfully authenticated, the `auth_method` used to display the authentication options is redirected to the `redirect_uri` with an access token as a url parameter. This access token is then passed back to the client library using postMessage and stored in the browser's localStorage for future requests.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+## Auth Providers
 
-`Authorization: meowmeowmeow`
+Merchants have the ability to decide how users authenticate themselves against the QuayPay API. The provideres of this authentication fit into three categories:
 
+### QuayPay Form
 
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
+The classic form registration and login is the default provider for API authentication. By default, these forms are shown in an overlayed iframe allowing the customer to enter their email and password to authenticate.
+
+### Third Party Federated Identity
+
+Merchants may allow customers to register and login using third party federated identity providers, generally provided by social networking services such as Facebook or Google. When a user has an existing session with one of these providers, registration and login are generally single-click actions.
+
+QuayPay currently provides access to the authentication services of Facebook and Google but merchants may request support for other providers.
+
+### Merchant Federated Identity
+
+Merchants who wish to have users authenticated on QuayPay using their own website's authentication scheme must support the oAuth2 standard for delegation of access to user resources by QuayPay.
 

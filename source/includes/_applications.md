@@ -4,39 +4,117 @@ An application object holds configuration and authentication settings defining h
 
 After signing up for developer access, you are provided with an application ID used to retreive and set these attributes.
 
-### Attributes for Authentication
+### Attributes
 
-Attribute | Default | Description
+Attribute | Type | Description
 --------- | ------- | -----------
-id | N/A | 
-secret | N/A | 
-redirect_uri | N/A | Where to redirect users after successfully authenticating via login providers.
-auth_providers | ['google', 'facebook', 'form'] | The authentication providers allowed for users to authenticate against the application. 
-auth_method | 'iframe' | The method of displaying the login page to the end user.
+id |String| 
+auth_method | String | The method of displaying the login page to the end user.
+auth_providers | Array | The authentication providers allowed for users to authenticate against the application.
+live | Boolean | Whether the gateway is currently accepting live or test payments.
+points | Object | Defines the configuration of <a href="#points">loyalty points</a>.
+redirect_uri |String| Where to redirect users after successfully authenticating via login providers. 
+secret |String| Used to commit requests and authenticate without oAuth.
 
-### Attributes for Gateway Settings
+## Retreiving an Application
 
-Attribute | Default | Description
---------- | ------- | -----------
-live | false | Whether the gateway is currently accepting live or test payments.
+```javascript
+qp.getApplication().then(function(response) { console.log(response.data) });
+```
+```json
+{
+	"id": "testappid",
+	"auth_method": "iframe",
+	"auth_providers": "['facebook, google, form']",
+	"live": false,
+	"points": {
+		"exchange": 0.2,
+		"buy_rules": [
+			{
+				"range": [0, 500],
+				"points": 0,
+				"percent": 0.5
+			},
+			{
+				"range": [500, 2000],
+				"points": 500,
+				"percent": 0
+			}
+
+		]
+	},
+	"redirect_uri": "http://merchant.com/logins/oauth.html"
+}
+```
+
+```shell
+curl https://gateway.quaypay.com/api/v2/applications/testappid \
+    -H "Authorization: Bearer f3ab55c097727130fdc183529131fadd4b36b7ec23fc968a7d776e56468f7134"
+
+> { 
+	application: {
+    	id: testappid,
+    	auth_method: 'iframe',
+    	auth_providers: ['facebook, google, form'],
+    	live: false,
+    	points: {
+			exchange: 0.2,
+			buy_rules: [
+				{
+					range: [0, 500],
+					points: 0,
+					percent: 0.5
+				},
+				{
+					range: [500, 2000],
+					points: 500,
+					percent: 0
+				}
+
+			]
+		},
+		redirect_uri: 'http://merchant.com/logins/oauth.html'
+	}
+}
+```
+
+The data returned when retreiving an application is dependent on your level of <a href="#authentication">authentication</a> when making the request.
+
+When unathenticated or using a non-merchant account to generate your API token, only the `auth_method`, `auth_providers` and `redirect_uri` are returned. 
+
+When using a merchant account to generate your API token, all fields except the application secret are returned.
 
 
-### Attributes for Loyalty Points Settings
-Attribute | Default | Description
---------- | ------- | -----------
-live | false | Whether the gateway is currently accepting live or test payments.
+## Modifying an Application
 
-> Make sure to replace `< FIELD >` with the authentication data provided by QuayPay.
+```javascript
+qp.updateApplication({auth_method: 'popup'});
+
+> {
+	id: testappid,
+	auth_method: 'popup',
+	...
+}
+
+```
+
+```shell
+curl https://gateway.quaypay.com/api/v2/applications/testappid \
+    -X PUT \
+    -H 'Content-Type: application/json' \ 
+    -H "Authorization: Bearer f3ab55c097727130fdc183529131fadd4b36b7ec23fc968a7d776e56468f7134" \
+    -d '{ "application": { "auth_method": "popup" } }'
+
+> { 
+	application: {
+    	id: testappid,
+    	auth_method: 'popup',
+    	...
+    }
+}
+```
 
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+To update your application, pass in an object containing the attrivutes you wish to update and their new values. 
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
+The updated application is returned after a successful request is made.
